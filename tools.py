@@ -84,13 +84,36 @@ def edges(po, direct):
     if dis == 0:
         dis = 0.01
     cons = sqrt(3 * dis)
-    print(cons)
     a, b = cons, 9 * cons / 16
     ans = Point((direct.left.x == 0 and direct.up.x == 0) * (x.x - direct.position.x),
                 (direct.left.y == 0 and direct.up.y == 0) * (x.y - direct.position.y),
                 (direct.left.z == 0 and direct.up.z == 0) * (x.z - direct.position.z)) + Point.vec(direct.position) + \
           direct.left * a + direct.up * b
     return ans, Point(ans.x, -ans.y, ans.z), Point(ans.x, -ans.y, -ans.z), Point(ans.x, ans.y, -ans.z)
+
+
+def back_point(p1, p2, direct):
+    # p1 - back one, p2 - front
+    edg = edges(p2, direct)
+    closest_point = Point(10000, 10000, 10000)
+    closness = 0
+    for i in range(4):
+        if i != 3:
+            k = plane_line(Plane.get(direct.position, edg[i], edg[i + 1]), p2, p1)
+            x = Vector.points(p1, k)
+            dis = x * x
+            if dis > closness:
+                closest_point = k
+                closness = dis
+        else:
+            k = plane_line(Plane.get(direct.position, edg[3], edg[0]), p2, p1)
+            x = Vector.points(p1, k)
+            dis = x * x
+            if dis > closness:
+                closest_point = k
+                closness = dis
+    pri(closest_point)
+    return point_to_screen(direct, closest_point)
 
 
 class Vector:
@@ -221,8 +244,10 @@ class Plane:
         return Plane(a, b, c, d)
 
 
-# pov = Direct(Point(1, 1, 2), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
-# insp = Point.list(list(map(float, input().split(","))))
+# pov = Direct(Point(0, 0, 0), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
+# ax, bx = Point.list(list(map(float, input().split(",")))), Point.list(list(map(float, input().split(","))))
+# pri(back_point(bx, ax, pov)[0])
+
 # edges(insp, pov)
 # pri(point_to_screen(pov, insp)[0])
 
