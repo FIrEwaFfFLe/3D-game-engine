@@ -62,7 +62,8 @@ def point_to_screen(direc, a):
     a += d
     if distance == 0:
         distance = 0.01
-    cons = sqrt((constants.width ** 2) / (12 * distance))
+    cons = constants.width / (sqrt(3 * distance) * 2)
+    # cons [pix / unit]
     che = direc.front * d
     return b(plane_coordinates(direc.left, direc.up, Vector.poi(Vector.points(direc.position, a)) * cons)) + \
            Coordinate(constants.width // 2, constants.height // 2), che != abs(che)
@@ -73,6 +74,23 @@ def plane_line(pl, p1, p2):
     t = (pl.a * p1.x + pl.b * p1.y + pl.c * p1.z + pl.d) / \
         (pl.a * (p1.x - p2.x) + pl.b * (p1.y - p2.y) + pl.c * (p1.z - p2.z))
     return p1 + Vector.points(p1, p2) * t
+
+
+def edges(po, direct):
+    # p1 - back point, p2 - orientating
+    x = straight_distance(direct, po)
+    vec1 = Vector.points(direct.position, x)
+    dis = vec1 * vec1
+    if dis == 0:
+        dis = 0.01
+    cons = sqrt(3 * dis)
+    print(cons)
+    a, b = cons, 9 * cons / 16
+    ans = Point((direct.left.x == 0 and direct.up.x == 0) * (x.x - direct.position.x),
+                (direct.left.y == 0 and direct.up.y == 0) * (x.y - direct.position.y),
+                (direct.left.z == 0 and direct.up.z == 0) * (x.z - direct.position.z)) + Point.vec(direct.position) + \
+          direct.left * a + direct.up * b
+    return ans, Point(ans.x, -ans.y, ans.z), Point(ans.x, -ans.y, -ans.z), Point(ans.x, ans.y, -ans.z)
 
 
 class Vector:
@@ -203,9 +221,10 @@ class Plane:
         return Plane(a, b, c, d)
 
 
-# pov = Direct(Point(3.2349999999999532, 1.4749999999999908, 0), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
-# insp = Point.list(list(map(float, input().split())))
-# pri(point_to_screen(pov, insp))
+# pov = Direct(Point(1, 1, 2), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
+# insp = Point.list(list(map(float, input().split(","))))
+# edges(insp, pov)
+# pri(point_to_screen(pov, insp)[0])
 
 # pri(plane_line(Plane.get(Point.list(list(map(float, input().split(",")))),
 #                         Point.list(list(map(float, input().split(",")))),
