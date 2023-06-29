@@ -33,18 +33,21 @@ def run(points, point_colors, connections, connection_colors, direct):
             if q.type == QUIT:
                 running = False
         keys = key.get_pressed()
+        current_speed = v
+        if keys[1073742048]:
+            current_speed *= multiply
         if keys[119]:
             # w
-            direct.position.x += v
+            direct.position.x += current_speed
         if keys[115]:
             # s
-            direct.position.x -= v
+            direct.position.x -= current_speed
         if keys[97]:
             # a
-            direct.position.y += v
+            direct.position.y += current_speed
         if keys[100]:
             # d
-            direct.position.y -= v
+            direct.position.y -= current_speed
         if keys[103]:
             # g - debug
             pri(direct.position)
@@ -52,9 +55,9 @@ def run(points, point_colors, connections, connection_colors, direct):
                 print(c(point_to_screen(direct, points[i])))
         if keys[32]:
             # space
-            direct.position.z += v
+            direct.position.z += current_speed
         if keys[1073742049]:
-            direct.position.z -= v
+            direct.position.z -= current_speed
 
         # Points to coordinates
         coordinates = [c(point_to_screen(direct, points[i])) for i in range(len(points))]
