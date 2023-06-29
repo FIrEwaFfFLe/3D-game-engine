@@ -103,6 +103,7 @@ def back_point(p1, p2, direct):
     edg = edges(p2, direct)
     closest_point = Point(10000, 10000, 10000)
     closness = 0
+    vir = True
     for i in range(4):
         if i != 3:
             k = plane_line(Plane.get(direct.position, edg[i], edg[i + 1]), p2, p1)
@@ -113,6 +114,7 @@ def back_point(p1, p2, direct):
             if dis > closness:
                 closest_point = k
                 closness = dis
+                vir = False
         else:
             k = plane_line(Plane.get(direct.position, edg[3], edg[0]), p2, p1)
             if t(k) == "bool":
@@ -122,7 +124,11 @@ def back_point(p1, p2, direct):
             if dis > closness:
                 closest_point = k
                 closness = dis
-    return point_to_screen(direct, closest_point)
+                vir = False
+    if not vir:
+        return point_to_screen(direct, closest_point)
+    else:
+        return False
 
 
 class Vector:

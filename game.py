@@ -50,26 +50,36 @@ def run(points, point_colors, connections, connection_colors, direct):
             pri(direct.position)
             for i in range(len(points)):
                 print(c(point_to_screen(direct, points[i])))
+        if keys[32]:
+            # space
+            direct.position.z += v
+        if keys[1073742049]:
+            direct.position.z -= v
 
         # Points to coordinates
         coordinates = [c(point_to_screen(direct, points[i])) for i in range(len(points))]
 
         # filling screen
         screen.fill(WHITE)
-        for i in range(len(points)):
-            if check(coordinates[i]):
-                draw_point(direct, points[i], coordinates[i], point_colors[i])
-            else:
-                continue
+        # connections
         for i in range(len(connections)):
             if coordinates[connections[i][0]][1] and coordinates[connections[i][1]][1]:
                 draw.line(screen, connection_colors[i], coordinates[connections[i][0]][0],
                           coordinates[connections[i][1]][0])
             elif coordinates[connections[i][0]][1]:
-                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][0],
-                          c(back_point(points[connections[i][1]], points[connections[i][0]], direct))[0])
+                fun = back_point(points[connections[i][1]], points[connections[i][0]], direct)
+                if t(fun) == "bool":
+                    continue
+                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][0], c(fun)[0])
             elif coordinates[connections[i][1]][1]:
-                draw.line(screen, connection_colors[i],
-                          c(back_point(points[connections[i][0]], points[connections[i][1]], direct))[0],
-                          coordinates[connections[i][1]][0])
+                fun = back_point(points[connections[i][0]], points[connections[i][1]], direct)
+                if t(fun) == "bool":
+                    continue
+                draw.line(screen, connection_colors[i], c(fun)[0], coordinates[connections[i][1]][0])
+        # points
+        for i in range(len(points)):
+            if check(coordinates[i]):
+                draw_point(direct, points[i], coordinates[i], point_colors[i])
+            else:
+                continue
         display.update()
