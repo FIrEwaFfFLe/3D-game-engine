@@ -33,6 +33,8 @@ def pri(inp):
         print(t(inp) + "(" + str(inp.x) + ", " + str(inp.y) + ", " + str(inp.z) + ")")
     elif t(inp) == "Coordinate":
         print(t(inp) + "(" + str(inp.x) + ", " + str(inp.y) + ")")
+    elif t(inp) == "Plane":
+        print(t(inp) + "(" + str(inp.a) + ", " + str(inp.b) + ", " + str(inp.c) + ", " + str(inp.d) + ")")
 
 
 def straight_distance(direc, c):
@@ -180,6 +182,22 @@ class Coordinate:
         print("__sub__ in Coordinate, no such subtraction companion")
         print(1 / 0)
 
+
+class Plane:
+    def __init__(self, a, b, c, d):
+        self.a, self.b, self.c, self.d = a, b, c, d
+
+    @classmethod
+    def get(cls, p1, p2, p3):
+        a = (p1.y - p2.y) * (p2.z - p3.z) - (p3.y - p2.y) * (p2.z - p1.z)
+        b = (p2.z - p3.z) * (p2.x - p1.x) + (p2.z - p1.z) * (p3.x - p2.x)
+        c = (p1.y - p2.y) * (p3.x - p2.x) + (p3.y - p2.y) * (p2.x - p1.x)
+        d = -(a * p1.x + b * p1.y + c * p1.z)
+        return Plane(a, b, c, d)
+
+
 # pov = Direct(Point(3.2349999999999532, 1.4749999999999908, 0), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
 # insp = Point.list(list(map(float, input().split())))
 # pri(point_to_screen(pov, insp))
+
+# pri(Plane.get(Point.list(list(map(float, input().split(",")))), Point.list(list(map(float, input().split(",")))), Point.list(list(map(float, input().split(","))))))
