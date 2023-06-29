@@ -68,6 +68,13 @@ def point_to_screen(direc, a):
            Coordinate(constants.width // 2, constants.height // 2), che != abs(che)
 
 
+def plane_line(pl, p1, p2):
+    # p1 -> p2 vector
+    t = (pl.a * p1.x + pl.b * p1.y + pl.c * p1.z + pl.d) / \
+        (pl.a * (p1.x - p2.x) + pl.b * (p1.y - p2.y) + pl.c * (p1.z - p2.z))
+    return p1 + Vector.points(p1, p2) * t
+
+
 class Vector:
     def __init__(self, x, y, z):
         self.x, self.y, self.z = p(x), p(y), p(z)
@@ -185,7 +192,7 @@ class Coordinate:
 
 class Plane:
     def __init__(self, a, b, c, d):
-        self.a, self.b, self.c, self.d = a, b, c, d
+        self.a, self.b, self.c, self.d = p(a), p(b), p(c), p(d)
 
     @classmethod
     def get(cls, p1, p2, p3):
@@ -200,4 +207,8 @@ class Plane:
 # insp = Point.list(list(map(float, input().split())))
 # pri(point_to_screen(pov, insp))
 
-# pri(Plane.get(Point.list(list(map(float, input().split(",")))), Point.list(list(map(float, input().split(",")))), Point.list(list(map(float, input().split(","))))))
+# pri(plane_line(Plane.get(Point.list(list(map(float, input().split(",")))),
+#                         Point.list(list(map(float, input().split(",")))),
+#                         Point.list(list(map(float, input().split(","))))),
+#               Point.list(list(map(float, input().split(",")))),
+#               Point.list(list(map(float, input().split(","))))))
