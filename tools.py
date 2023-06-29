@@ -73,7 +73,11 @@ def plane_line(pl, p1, p2):
     # p1 -> p2 vector
     t = (pl.a * p1.x + pl.b * p1.y + pl.c * p1.z + pl.d) / \
         (pl.a * (p1.x - p2.x) + pl.b * (p1.y - p2.y) + pl.c * (p1.z - p2.z))
-    return p1 + Vector.points(p1, p2) * t
+    t = p(t)
+    if 0 <= t <= 1:
+        return p1 + Vector.points(p1, p2) * t
+    else:
+        return False
 
 
 def edges(po, direct):
@@ -85,11 +89,13 @@ def edges(po, direct):
         dis = 0.01
     cons = sqrt(3 * dis)
     a, b = cons, 9 * cons / 16
-    ans = Point((direct.left.x == 0 and direct.up.x == 0) * (x.x - direct.position.x),
-                (direct.left.y == 0 and direct.up.y == 0) * (x.y - direct.position.y),
-                (direct.left.z == 0 and direct.up.z == 0) * (x.z - direct.position.z)) + Point.vec(direct.position) + \
-          direct.left * a + direct.up * b
-    return ans, Point(ans.x, -ans.y, ans.z), Point(ans.x, -ans.y, -ans.z), Point(ans.x, ans.y, -ans.z)
+    ans = Vector((direct.left.x == 0 and direct.up.x == 0) * (x.x - direct.position.x),
+                 (direct.left.y == 0 and direct.up.y == 0) * (x.y - direct.position.y),
+                 (direct.left.z == 0 and direct.up.z == 0) * (x.z - direct.position.z)) + direct.position
+    return ans + direct.left * a + direct.up * b, \
+           ans - direct.left * a + direct.up * b, \
+           ans - direct.left * a - direct.up * b, \
+           ans + direct.left * a - direct.up * b
 
 
 def back_point(p1, p2, direct):
@@ -100,6 +106,8 @@ def back_point(p1, p2, direct):
     for i in range(4):
         if i != 3:
             k = plane_line(Plane.get(direct.position, edg[i], edg[i + 1]), p2, p1)
+            if t(k) == "bool":
+                continue
             x = Vector.points(p1, k)
             dis = x * x
             if dis > closness:
@@ -107,12 +115,13 @@ def back_point(p1, p2, direct):
                 closness = dis
         else:
             k = plane_line(Plane.get(direct.position, edg[3], edg[0]), p2, p1)
+            if t(k) == "bool":
+                continue
             x = Vector.points(p1, k)
             dis = x * x
             if dis > closness:
                 closest_point = k
                 closness = dis
-    pri(closest_point)
     return point_to_screen(direct, closest_point)
 
 
@@ -242,7 +251,6 @@ class Plane:
         c = (p1.y - p2.y) * (p3.x - p2.x) + (p3.y - p2.y) * (p2.x - p1.x)
         d = -(a * p1.x + b * p1.y + c * p1.z)
         return Plane(a, b, c, d)
-
 
 # pov = Direct(Point(0, 0, 0), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
 # ax, bx = Point.list(list(map(float, input().split(",")))), Point.list(list(map(float, input().split(","))))

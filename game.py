@@ -23,10 +23,11 @@ display.set_caption("3D")
 
 
 def run(points, point_colors, connections, connection_colors, direct):
-
     running = True
 
     while running:
+        clock = time.Clock()
+        clock.tick(FPS)
         # key inputs
         for q in event.get():
             if q.type == QUIT:
@@ -61,6 +62,14 @@ def run(points, point_colors, connections, connection_colors, direct):
             else:
                 continue
         for i in range(len(connections)):
-            if check(coordinates[connections[i][0]]) or check(coordinates[connections[i][1]]):
-                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][0], coordinates[connections[i][1]][0])
+            if coordinates[connections[i][0]][1] and coordinates[connections[i][1]][1]:
+                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][0],
+                          coordinates[connections[i][1]][0])
+            elif coordinates[connections[i][0]][1]:
+                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][0],
+                          c(back_point(points[connections[i][1]], points[connections[i][0]], direct))[0])
+            elif coordinates[connections[i][1]][1]:
+                draw.line(screen, connection_colors[i],
+                          c(back_point(points[connections[i][0]], points[connections[i][1]], direct))[0],
+                          coordinates[connections[i][1]][0])
         display.update()
