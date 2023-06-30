@@ -136,12 +136,26 @@ def solve(oy, ox, pos, a):
     si = sin(a)
     co = cos(a)
     znam = (pl.a * (oy.y * ox.z - ox.y * oy.z) - pl.b * (oy.x * ox.z - ox.x * oy.z) + pl.c * (oy.x * ox.y - ox.x * oy.y))
-    x1 = (pl.b * (oy.z * si - ox.z * co) - pl.c * (oy.y * si - ox.y * co) - pl.d * (oy.y * ox.z - ox.y * oy.z)) / znam
-    y1 = (-pl.a * (oy.z * si - ox.z * co) + pl.c * (oy.x * si - ox.x * co) + pl.d * (oy.x * ox.z - ox.x * oy.z)) / znam
-    z1 = (pl.a * (oy.y * si - ox.y * co) - pl.b * (oy.x * si - ox.x * co) - pl.d * (oy.x * ox.y - ox.x * oy.y)) / znam
+    x1 = (pl.b * (oy.z * si - ox.z * co) - pl.c * (oy.y * si - ox.y * co)) / znam
+    y1 = (-pl.a * (oy.z * si - ox.z * co) + pl.c * (oy.x * si - ox.x * co)) / znam
+    z1 = (pl.a * (oy.y * si - ox.y * co) - pl.b * (oy.x * si - ox.x * co)) / znam
     return Vector(x1, y1, z1)
 
 
+def horiz_rot(direct, a):
+    vecy = direct.front
+    vecx = direct.left
+    direct.front = solve(vecy, vecx, direct.position, a)
+    direct.left = solve(vecy, vecx, direct.position, a + constants.quater)
+    return direct
+
+
+def verti_rot(direct, a):
+    vecy = direct.front
+    vecx = direct.up
+    direct.front = solve(vecy, vecx, direct.position, a)
+    direct.up = solve(vecy, vecx, direct.position, a + constants.quater)
+    return direct
 
 
 class Vector:
@@ -271,7 +285,13 @@ class Plane:
         d = -(a * p1.x + b * p1.y + c * p1.z)
         return Plane(a, b, c, d)
 
-# pov = Direct(Point(0, 0, 0), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
+
+# pov = Direct(Point(0, 0, 0.3551136363636364), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
+# verti_rot(pov, pi / 4)
+# horiz_rot(pov, constants.ro_v)
+# pri(pov.front)
+# pri(pov.left)
+# pri(pov.up)
 # ax, bx = Point.list(list(map(float, input().split(",")))), Point.list(list(map(float, input().split(","))))
 # pri(back_point(bx, ax, pov)[0])
 

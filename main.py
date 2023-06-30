@@ -26,6 +26,5 @@ direct = Direct(Point(0, 0, 0),
                 Vector(0, 1, 0),
                 Vector(0, 0, 1))
 
-
 if __name__ == "__main__":
     game.run(points, po_cols, connections, connect_cols, direct)

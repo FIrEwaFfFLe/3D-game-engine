@@ -38,30 +38,43 @@ def run(points, point_colors, connections, connection_colors, direct):
             current_speed *= multiply
         if keys[119]:
             # w
-            direct.position.x += current_speed
+            direct.position += direct.front * current_speed
         if keys[115]:
             # s
-            direct.position.x -= current_speed
+            direct.position -= direct.front * current_speed
         if keys[97]:
             # a
-            direct.position.y += current_speed
+            direct.position += direct.left * current_speed
         if keys[100]:
             # d
-            direct.position.y -= current_speed
+            direct.position -= direct.left * current_speed
+        if keys[32]:
+            # space
+            direct.position += direct.up * current_speed
+        if keys[1073742049]:
+            # shift
+            direct.position -= direct.up * current_speed
+        if keys[1073741904]:
+            # left arrow
+            horiz_rot(direct, ro_v)
+        if keys[1073741903]:
+            # right arrow
+            horiz_rot(direct, -ro_v)
+        if keys[1073741906]:
+            # up arrow
+            verti_rot(direct, ro_v)
+        if keys[1073741905]:
+            # down arrow
+            verti_rot(direct, -ro_v)
         if keys[103]:
             # g - debug
             pri(direct.position)
-            for i in range(len(points)):
-                print(c(point_to_screen(direct, points[i])))
-        if keys[32]:
-            # space
-            direct.position.z += current_speed
-        if keys[1073742049]:
-            direct.position.z -= current_speed
+            pri(direct.front)
+            pri(direct.left)
+            pri(direct.up)
 
         # Points to coordinates
         coordinates = [c(point_to_screen(direct, points[i])) for i in range(len(points))]
-
         # filling screen
         screen.fill(WHITE)
         # connections
