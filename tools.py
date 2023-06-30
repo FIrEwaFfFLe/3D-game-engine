@@ -131,6 +131,19 @@ def back_point(p1, p2, direct):
         return False
 
 
+def solve(oy, ox, pos, a):
+    pl = Plane.get(pos, pos + oy, pos + ox)
+    si = sin(a)
+    co = cos(a)
+    znam = (pl.a * (oy.y * ox.z - ox.y * oy.z) - pl.b * (oy.x * ox.z - ox.x * oy.z) + pl.c * (oy.x * ox.y - ox.x * oy.y))
+    x1 = (pl.b * (oy.z * si - ox.z * co) - pl.c * (oy.y * si - ox.y * co) - pl.d * (oy.y * ox.z - ox.y * oy.z)) / znam
+    y1 = (-pl.a * (oy.z * si - ox.z * co) + pl.c * (oy.x * si - ox.x * co) + pl.d * (oy.x * ox.z - ox.x * oy.z)) / znam
+    z1 = (pl.a * (oy.y * si - ox.y * co) - pl.b * (oy.x * si - ox.x * co) - pl.d * (oy.x * ox.y - ox.x * oy.y)) / znam
+    return Vector(x1, y1, z1)
+
+
+
+
 class Vector:
     def __init__(self, x, y, z):
         self.x, self.y, self.z = p(x), p(y), p(z)
