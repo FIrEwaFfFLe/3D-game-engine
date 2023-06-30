@@ -142,19 +142,25 @@ def solve(oy, ox, pos, a):
     return Vector(x1, y1, z1)
 
 
+def rotate_vector_count_clock(vec, si, co):
+    return Vector(vec.x * co - vec.y * si, vec.x * si + vec.y * co, vec.z)
+
+
 def horiz_rot(direct, a):
-    vecy = direct.front
-    vecx = direct.left
-    direct.front = solve(vecy, vecx, direct.position, a)
-    direct.left = solve(vecy, vecx, direct.position, a + constants.quater)
+    si, co = sin(a), cos(a)
+    direct.front = rotate_vector_count_clock(direct.front, si, co)
+    direct.left = rotate_vector_count_clock(direct.left, si, co)
+    direct.up = rotate_vector_count_clock(direct.up, si, co)
     return direct
 
 
 def verti_rot(direct, a):
     vecy = direct.front
     vecx = direct.up
-    direct.front = solve(vecy, vecx, direct.position, a)
-    direct.up = solve(vecy, vecx, direct.position, a + constants.quater)
+    checker = solve(vecy, vecx, direct.position, a + constants.quater)
+    if 0 <= checker.z:
+        direct.front = solve(vecy, vecx, direct.position, a)
+        direct.up = checker
     return direct
 
 
@@ -294,7 +300,7 @@ class Plane:
 # pri(pov.up)
 # ax, bx = Point.list(list(map(float, input().split(",")))), Point.list(list(map(float, input().split(","))))
 # pri(back_point(bx, ax, pov)[0])
-
+# pri(rotate_vector_count_clock(Vector(1, 0, 0), 0.5, sqrt(0.75)))
 # edges(insp, pov)
 # pri(point_to_screen(pov, insp)[0])
 
