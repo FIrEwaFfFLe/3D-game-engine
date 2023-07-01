@@ -3,4 +3,7 @@ BLACK, WHITE, BLUE, GREEN, RED = (0, 0, 0), (255, 255, 255), (0, 0, 255), (0, 25
 FPS = 176
 quater = 1.57079632679
 ro_v = 0.015
+M = FPS * 600 + 1
+reaction_time = FPS / 7
+text_size = 25
 v, multiply = 12.5 / FPS, 2

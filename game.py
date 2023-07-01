@@ -17,13 +17,23 @@ def draw_point(direct, po, coor, col):
     draw.circle(screen, col, coor[0], 30 / distance, 100)
 
 
+def draw_text(text, f, col, coor):
+    img = f.render(text, True, col)
+    screen.blit(img, coor)
+
+
 init()
 screen = display.set_mode((width, height))
 display.set_caption("3D")
+text_font = font.SysFont("Times New Roman", text_size)
 
 
 def run(points, point_colors, connections, connection_colors, direct):
     running = True
+    show_cor = False
+    last_show_cor = -200
+    last_debug = -200
+    clip = 1
 
     while running:
         clock = time.Clock()
@@ -68,11 +78,15 @@ def run(points, point_colors, connections, connection_colors, direct):
             verti_rot(direct, -ro_v)
         if keys[103]:
             # g - debug
-            pri(direct.position)
-            pri(direct.front)
-            pri(direct.left)
-            pri(direct.up)
-
+            if clip - last_debug > reaction_time:
+                pri(direct.position)
+                pri(direct.front)
+                last_debug = clip
+        if keys[121]:
+            # y - show coordinates
+            if clip - last_show_cor > reaction_time:
+                show_cor = not show_cor
+                last_show_cor = clip
         # Points to coordinates
         coordinates = [c(point_to_screen(direct, points[i])) for i in range(len(points))]
         # filling screen
@@ -98,4 +112,13 @@ def run(points, point_colors, connections, connection_colors, direct):
                 draw_point(direct, points[i], coordinates[i], point_colors[i])
             else:
                 continue
+        if show_cor:
+            draw_text("x: " + str(round(direct.position.x * 100) / 100) +
+                      ", y: " + str(round(direct.position.y * 100) / 100) +
+                      ", z: " + str(round(direct.position.z * 100) / 100), text_font, BLACK, (0, 0))
+            draw_text(str(round(direct.front.x * 100) / 100) + ", " +
+                      str(round(direct.front.y * 100) / 100) + ", " +
+                      str(round(direct.front.z * 100) / 100), text_font, BLACK, (0, text_size))
+        clip += 1
+        clip %= M
         display.update()
