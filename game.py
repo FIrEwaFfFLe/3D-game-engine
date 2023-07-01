@@ -38,10 +38,10 @@ def run(points, point_colors, connections, connection_colors, direct):
             current_speed *= multiply
         if keys[119]:
             # w
-            direct.position += direct.front * current_speed
+            direct.position += Vector(direct.left.y, -direct.left.x, direct.left.z) * current_speed
         if keys[115]:
             # s
-            direct.position -= direct.front * current_speed
+            direct.position -= Vector(direct.left.y, -direct.left.x, direct.left.z) * current_speed
         if keys[97]:
             # a
             direct.position += direct.left * current_speed
@@ -50,10 +50,10 @@ def run(points, point_colors, connections, connection_colors, direct):
             direct.position -= direct.left * current_speed
         if keys[32]:
             # space
-            direct.position += direct.up * current_speed
+            direct.position.z += current_speed
         if keys[1073742049]:
             # shift
-            direct.position -= direct.up * current_speed
+            direct.position.z -= current_speed
         if keys[1073741904]:
             # left arrow
             horiz_rot(direct, ro_v)
