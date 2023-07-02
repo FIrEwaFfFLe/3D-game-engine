@@ -25,7 +25,7 @@ def b(x):
 
 
 def c(x):
-    return (x[0].x, x[0].y), x[1]
+    return x[0], (x[1].x, x[1].y), x[2]
 
 
 def pri(inp):
@@ -58,14 +58,14 @@ def plane_coordinates(i, j, a):
 
 def point_to_screen(direc, a):
     d = Vector.points(straight_distance(direc, a), direc.position)
-    distance = d * d
+    distance = sqrt(d * d)
     a += d
     if distance == 0:
         distance = 0.01
-    cons = constants.width / (sqrt(3 * distance) * 2)
+    cons = constants.width / (constants.sqrt3 * distance * 2)
     # cons [pix / unit]
     che = direc.front * d
-    return b(plane_coordinates(direc.left, direc.up, Vector.poi(Vector.points(direc.position, a)) * cons)) + \
+    return distance, b(plane_coordinates(direc.left, direc.up, Vector.poi(Vector.points(direc.position, a)) * cons)) + \
            Coordinate(constants.width // 2, constants.height // 2), che != abs(che)
 
 
@@ -135,7 +135,8 @@ def solve(oy, ox, pos, a):
     pl = Plane.get(pos, pos + oy, pos + ox)
     si = sin(a)
     co = cos(a)
-    znam = (pl.a * (oy.y * ox.z - ox.y * oy.z) - pl.b * (oy.x * ox.z - ox.x * oy.z) + pl.c * (oy.x * ox.y - ox.x * oy.y))
+    znam = (pl.a * (oy.y * ox.z - ox.y * oy.z) - pl.b * (oy.x * ox.z - ox.x * oy.z) + pl.c * (
+                oy.x * ox.y - ox.x * oy.y))
     x1 = (pl.b * (oy.z * si - ox.z * co) - pl.c * (oy.y * si - ox.y * co)) / znam
     y1 = (-pl.a * (oy.z * si - ox.z * co) + pl.c * (oy.x * si - ox.x * co)) / znam
     z1 = (pl.a * (oy.y * si - ox.y * co) - pl.b * (oy.x * si - ox.x * co)) / znam
@@ -290,7 +291,6 @@ class Plane:
         c = (p1.y - p2.y) * (p3.x - p2.x) + (p3.y - p2.y) * (p2.x - p1.x)
         d = -(a * p1.x + b * p1.y + c * p1.z)
         return Plane(a, b, c, d)
-
 
 # pov = Direct(Point(0, 0, 0.3551136363636364), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1))
 # verti_rot(pov, pi / 4)

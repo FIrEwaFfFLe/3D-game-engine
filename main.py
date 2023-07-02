@@ -10,7 +10,7 @@ def rc():
     return randint(0, 200), randint(0, 200), randint(0, 200)
 
 
-# points = [Point(6, i, j) for i in range(-10, 11) for j in range(-10, 11)]
+points = [Point(6, i, j) for i in range(-10, 11) for j in range(-10, 11)]
 points = [Point(2, 2, 1), Point(2, -2, 1), Point(2, -2, -1), Point(2, 2, -1),
           Point(5, 2, 1), Point(5, -2, 1), Point(5, -2, -1), Point(5, 2, -1)]
 po_cols = [rc() for i in range(100)]

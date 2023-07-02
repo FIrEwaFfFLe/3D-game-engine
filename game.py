@@ -5,16 +5,8 @@ from constants import *
 from tools import *
 
 
-def check(co):
-    if 0 <= co[0][0] <= width - 1 and 0 <= co[0][1] <= height - 1 and co[1]:
-        return True
-    return False
-
-
-def draw_point(direct, po, coor, col):
-    midvec = Vector.points(direct.position, po)
-    distance = sqrt(midvec * midvec)
-    draw.circle(screen, col, coor[0], 30 / distance, 100)
+def draw_point(coor, col):
+    draw.circle(screen, col, coor[1], 30 / coor[0], 100)
 
 
 def draw_text(text, f, col, coor):
@@ -88,30 +80,29 @@ def run(points, point_colors, connections, connection_colors, direct):
                 show_cor = not show_cor
                 last_show_cor = clip
         # Points to coordinates
+        # (distance, coordinate, in/out of view scope)
         coordinates = [c(point_to_screen(direct, points[i])) for i in range(len(points))]
         # filling screen
         screen.fill(WHITE)
         # connections
         for i in range(len(connections)):
-            if coordinates[connections[i][0]][1] and coordinates[connections[i][1]][1]:
-                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][0],
-                          coordinates[connections[i][1]][0])
-            elif coordinates[connections[i][0]][1]:
+            if coordinates[connections[i][0]][2] and coordinates[connections[i][1]][2]:
+                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][1],
+                          coordinates[connections[i][1]][1])
+            elif coordinates[connections[i][0]][2]:
                 fun = back_point(points[connections[i][1]], points[connections[i][0]], direct)
                 if t(fun) == "bool":
                     continue
-                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][0], c(fun)[0])
-            elif coordinates[connections[i][1]][1]:
+                draw.line(screen, connection_colors[i], coordinates[connections[i][0]][1], c(fun)[1])
+            elif coordinates[connections[i][1]][2]:
                 fun = back_point(points[connections[i][0]], points[connections[i][1]], direct)
                 if t(fun) == "bool":
                     continue
-                draw.line(screen, connection_colors[i], c(fun)[0], coordinates[connections[i][1]][0])
+                draw.line(screen, connection_colors[i], c(fun)[1], coordinates[connections[i][1]][1])
         # points
         for i in range(len(points)):
-            if check(coordinates[i]):
-                draw_point(direct, points[i], coordinates[i], point_colors[i])
-            else:
-                continue
+            if coordinates[i][2]:
+                draw_point(coordinates[i], point_colors[i])
         if show_cor:
             draw_text("x: " + str(round(direct.position.x * 100) / 100) +
                       ", y: " + str(round(direct.position.y * 100) / 100) +

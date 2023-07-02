@@ -5,5 +5,6 @@ quater = 1.57079632679
 ro_v = 0.015
 M = FPS * 600 + 1
 reaction_time = FPS / 7
+sqrt3 = 1.73205080757
 text_size = 25
 v, multiply = 12.5 / FPS, 2
