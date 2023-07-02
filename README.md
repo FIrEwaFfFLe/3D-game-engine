@@ -1,13 +1,13 @@
-#3D game engine
+# 3D game engine
 
-##Start main.py and enjoy! 
+## Start main.py and enjoy! 
 
 Wasd+space+shift - position controls (ctrl to move twice as fast),
 arrow keys - camera controls,
 "g" - print current position and camera facing vector to terminal, 
 "y" - display sed parameters on screen.
 
-##Make your own points and connections
+## Make your own points and connections
 In main.py you can set your own points in the list "points" using the class
 Point(x, y, z).
 
@@ -18,4 +18,4 @@ the list "points".
 If the game is rendering slowly, you can calibrate the FPS in constants.py
 to some lower value.
 
-##Updates coming soon!
+## Updates coming soon!
